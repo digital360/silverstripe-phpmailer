@@ -117,6 +117,7 @@ class SmtpMailer extends Mailer
         $plainContent = '', $inlineImages = [])
     {
         $this->instantiate();
+
         $this->mailer->IsHTML(true);
         if ($inlineImages) {
             // Inline images hav to be located in the base folder
@@ -131,7 +132,6 @@ class SmtpMailer extends Mailer
         return $this->sendMailViaSmtp($to, $from, $subject, $attachedFiles, $customHeaders);
     }
 
-
     /**
      * @param string $to
      * @param string $from
@@ -142,6 +142,7 @@ class SmtpMailer extends Mailer
      */
     protected function sendMailViaSmtp($to, $from, $subject, array $attachedFiles, array $customHeaders)
     {
+
         if ($this->mailer->SMTPDebug > 0) {
             /** @todo Check this logic and message */
             echo "<em><strong>*** Debug mode is on</strong>, printing debug messages and not redirecting to the website:</em><br/>";
@@ -209,11 +210,13 @@ class SmtpMailer extends Mailer
         }
 
         $this->mailer->ClearAddresses();
-        if (preg_match($filterOutNamePattern, $to, $nameAndEmail)) {
-            $this->mailer->AddAddress($nameAndEmail[3], $nameAndEmail[2]);
-        }else {
-            $name = ucfirst(strstr($to, '@'));
-            $this->mailer->AddAddress($to, $name);
+
+        $addresses = preg_split('/(,|;)/', $to);
+
+        if (count($addresses) > 0) {
+            foreach ($addresses as $address) {
+                $this->mailer->AddAddress(trim($address));
+            }
         }
 
         $this->mailer->Subject = $subject;
@@ -276,5 +279,6 @@ class SmtpMailer extends Mailer
             }
         }
     }
+
 
 }

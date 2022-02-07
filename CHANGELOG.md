@@ -3,6 +3,9 @@ SILVERSTRIPE-PHPMAILER
 
 # CHANGELOG
 
+# 1.0.0 (2022-02-07)
+* Added the ability for multiple addresses
+
 # 0.9.7 (2018-02-19)
 * Updated to phpmailer version 6.0.3
 
